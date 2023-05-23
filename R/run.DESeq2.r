@@ -26,15 +26,19 @@ run.DESeq2 <- function(counts, target, varInt, batch=NULL,
   cat(paste(as.character(design(dds)),collapse=" "),"\n")					  
   
   # normalization
-  dds <- estimateSizeFactors(dds,locfunc=eval(as.name(locfunc)))
-  cat("\nNormalization factors:\n")
-  print(sizeFactors(dds))
+  # dds <- estimateSizeFactors(dds,locfunc=eval(as.name(locfunc)))
+  # cat("\nNormalization factors:\n")
+  # print(sizeFactors(dds))
   
   # estimating dispersions
-  dds <- estimateDispersions(dds, fitType=fitType)
+  # dds <- estimateDispersions(dds, fitType=fitType)
   
   # statistical testing: perform all the comparisons between the levels of varInt
-  dds <- nbinomWaldTest(dds, ...)
+  # dds <- nbinomWaldTest(dds, ...)
+  #--------------------------------------------------------------------------------------------------------------------------
+  # Custom addition 
+  dds = DESeq(dds, minReplicatesForReplace = Inf)
+  
   results <- list()
   for (comp in combn(nlevels(colData(dds)[,varInt]), 2, simplify=FALSE)){
     levelRef <- levels(colData(dds)[,varInt])[comp[1]]
